@@ -1,0 +1,49 @@
+esphome:
+  name: computherm
+  libraries:
+    - SPI
+    - "SmartRC-CC1101-Driver-Lib"
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+  level: VERBOSE
+  tx_buffer_size: 4096
+
+# Enable Home Assistant API
+api:
+  password: !secret api_password
+
+web_server:
+
+ota:
+  - platform: esphome
+    password: !secret api_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Heating Fallback Hotspot"
+    password: !secret heating_hotspot_password
+
+captive_portal:
+
+external_components:
+  - source: github://github.com/belcsik/esphome-q7rf-tx
+    components: [ q7rf_tx ]
+
+q7rf_tx:
+  clk_pin: D5
+  miso_pin: D6
+  mosi_pin: D7
+  cs_pin: D1
+  devices:
+    - name: "heat_pump"
+      device_id: 0x1234
+    - name: "furnace"
+      device_id: 0x2345
