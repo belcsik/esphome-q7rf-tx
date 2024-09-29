@@ -34,7 +34,7 @@ wifi:
 captive_portal:
 
 external_components:
-  - source: github://github.com/belcsik/esphome-q7rf-tx
+  - source: github://belcsik/esphome-q7rf-tx
     components: [ q7rf_tx ]
 
 q7rf_tx:
