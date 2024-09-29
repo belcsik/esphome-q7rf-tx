@@ -16,8 +16,6 @@ logger:
 api:
   password: !secret api_password
 
-web_server:
-
 ota:
   - platform: esphome
     password: !secret api_password
@@ -30,8 +28,6 @@ wifi:
   ap:
     ssid: "Heating Fallback Hotspot"
     password: !secret heating_hotspot_password
-
-captive_portal:
 
 external_components:
   - source: github://belcsik/esphome-q7rf-tx

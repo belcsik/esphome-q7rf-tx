@@ -1,4 +1,5 @@
 #include "esphome/core/log.h"
+#include "esphome/core/hal.h"
 #include <climits>
 
 #include "q7rf_tx.h"
