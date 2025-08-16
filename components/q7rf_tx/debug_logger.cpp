@@ -6,7 +6,7 @@ const bool DebugLogger::ENABLED = (ESPHOME_LOG_LEVEL >= ESPHOME_LOG_LEVEL_VERBOS
 
 void DebugLogger::flush_() {
   if (ENABLED) {
-    ESP_LOGV(tag_, "%s", ss_.str().c_str());
+    ESP_LOGD(tag_, "%s", ss_.str().c_str());
     ss_.str("");
     ss_.clear();
   }

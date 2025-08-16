@@ -53,27 +53,27 @@ uint32_t Device::elapsed(uint32_t since, uint32_t now) {
 
 void Device::send_state_() {
   last_resend_millis_ = millis();
-  ESP_LOGV(TAG, "0x%x started sending state %d", device_id_, state_);
+  ESP_LOGD(TAG, "0x%x started sending state %d", device_id_, state_);
   const bool state = state_;
   ThermostatSwitch *const thermostat_switch = thermostat_switch_;
   const uint16_t device_id = device_id_;
   transmitter_->send(state_ ? on_message_ : off_message_, [state, thermostat_switch, device_id](bool success) {
     if (success) {
       thermostat_switch->publish_state(state);
-      ESP_LOGV(TAG, "0x%x succeeded sending state %d", device_id, state);
+      ESP_LOGD(TAG, "0x%x succeeded sending state %d", device_id, state);
     } else {
-      ESP_LOGV(TAG, "0x%x failed sending state %d", device_id, state);
+      ESP_LOGD(TAG, "0x%x failed sending state %d", device_id, state);
     }
   });
 }
 
 void Device::set_state_(bool state) {
   if (this->state_ != state) {
-    ESP_LOGV(TAG, "0x%x setting state %d", device_id_, state);
+    ESP_LOGD(TAG, "0x%x setting state %d", device_id_, state);
     this->state_ = state;
     send_state_();
   } else {
-    ESP_LOGV(TAG, "0x%x state %d already set", device_id_, state);
+    ESP_LOGD(TAG, "0x%x state %d already set", device_id_, state);
   }
 }
 
@@ -93,9 +93,9 @@ Device::Device(uint16_t device_id, uint32_t resend_interval, uint32_t watchdog_i
   pair_button->set_device(this);
   thermostat_switch_->set_device(this);
 
-  ESP_LOGV(TAG, "Pair message: %d %s", pair_message_.size(), message_to_string(pair_message_).c_str());
-  ESP_LOGV(TAG, "On message: %d %s", on_message_.size(), message_to_string(on_message_).c_str());
-  ESP_LOGV(TAG, "Off message: %d %s", off_message_.size(), message_to_string(off_message_).c_str());
+  ESP_LOGD(TAG, "Pair message: %d %s", pair_message_.size(), message_to_string(pair_message_).c_str());
+  ESP_LOGD(TAG, "On message: %d %s", on_message_.size(), message_to_string(on_message_).c_str());
+  ESP_LOGD(TAG, "Off message: %d %s", off_message_.size(), message_to_string(off_message_).c_str());
 }
 
 void Device::dump_config() const {
@@ -108,7 +108,7 @@ void Device::pair() const { transmitter_->send(pair_message_, nullptr); }
 
 void Device::set_switch(bool state) {
   last_switch_millis_ = millis();
-  ESP_LOGV(TAG, "0x%x switch received new state %d", device_id_, state);
+  ESP_LOGD(TAG, "0x%x switch received new state %d", device_id_, state);
   set_state_(state);
 }
 
@@ -119,20 +119,20 @@ void Device::loop() {
     set_state_(false);
   }
   if (elapsed(last_resend_millis_, now) > resend_interval_) {
-    ESP_LOGV(TAG, "0x%x resending state %d", device_id_, state_);
+    ESP_LOGD(TAG, "0x%x resending state %d", device_id_, state_);
     send_state_();
   }
 }
 
 void PairButton::press_action() {
-  ESP_LOGV(TAG, "Pressed");
+  ESP_LOGD(TAG, "Pressed");
   device_->pair();
 }
 
 void PairButton::set_device(Device *device) { device_ = device; }
 
 void ThermostatSwitch::write_state(bool state) {
-  ESP_LOGV(TAG, "switched");
+  ESP_LOGD(TAG, "switched");
   device_->set_switch(state);
 }
 

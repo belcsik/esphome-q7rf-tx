@@ -117,10 +117,10 @@ void Transmitter::setup() {
   ELECHOUSE_cc1101.setModul(module_number_);
 
   if (ELECHOUSE_cc1101.SpiReadStatus(0x31) > 0) {  // Check the CC1101 Spi connection.
-    ESP_LOGV(TAG, "Connection OK");
+    ESP_LOGD(TAG, "Connection OK");
     spi_status_ = 1;
   } else {
-    ESP_LOGV(TAG, "Connection Error");
+    ESP_LOGD(TAG, "Connection Error");
     spi_status_ = -1;
   }
 
@@ -183,7 +183,7 @@ void Transmitter::setup() {
 
   ELECHOUSE_cc1101.setSidle();
 
-  ESP_LOGV(TAG, "CC1101 module (%d) setup complete", module_number_);
+  ESP_LOGD(TAG, "CC1101 module (%d) setup complete", module_number_);
 }
 
 void Transmitter::send(const std::vector<uint8_t> &data, const std::function<void(bool)> &result_callback) {
